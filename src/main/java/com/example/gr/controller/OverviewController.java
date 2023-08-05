@@ -9,21 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class OverviewController {
 
     private final OverviewService overviewService;
-    CreateTaskRequest task;
 
     @Autowired
     public OverviewController(OverviewService overviewService){
         this.overviewService = overviewService;
     }
 
-    @GetMapping(value = "/overview")
-    public CommonResponse getOverview() {
+    @GetMapping(value = "/overview/{user_id}")
+    public CommonResponse getOverview(@PathVariable Long user_id) {
 
-        return overviewService.getOverview();
+        return overviewService.getOverview(user_id);
     }
 
     @PostMapping  ("/create_task")

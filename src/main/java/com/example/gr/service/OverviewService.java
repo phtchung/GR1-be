@@ -20,11 +20,11 @@ public class OverviewService {
     @Autowired
     private UserRepository userRepository;
 
-    public CommonResponse getOverview(){
+    public CommonResponse getOverview(Long user_id){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
             LocalDate today = LocalDate.now();
-            List<Task> taskToday = taskRepository.findTaskwithEndDateAfterTodayAndNotDone(today);
+            List<Task> taskToday = taskRepository.findTaskwithEndDateAfterTodayAndNotDone(today , user_id);
             long totalTask = taskRepository.findAll().size();
             long totalTaskDone = taskRepository.findTaskwithStateDone().size();
             OverviewResponse overviewResponse = new OverviewResponse(taskToday,totalTask,totalTaskDone);
@@ -32,7 +32,7 @@ public class OverviewService {
             if (taskToday == null)
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
 
-            return commonResponse.data(overviewResponse).result("200","Thành công!",true);
+            return commonResponse.data(overviewResponse);
 
         }catch (Exception e){
             return commonResponse.result("500","Có lỗi server!",false);
