@@ -14,23 +14,23 @@ public class TaskListService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public List<Task> getTaskLastWeekTodo() {
+    public List<Task> getTaskLastWeekTodo(Long user_id) {
         LocalDate today = LocalDate.now();
         LocalDate resultDate = today.minusDays(7);
-        return taskRepository.findTasksWithin7DaysTodo(resultDate);
+        return taskRepository.findTasksWithin7DaysTodo(resultDate, user_id);
     }
 
-    public List<Task> getTaskLastWeekInprogress() {
+    public List<Task> getTaskLastWeekInprogress(Long user_id) {
         LocalDate today = LocalDate.now();
         LocalDate resultDate = today.minusDays(7);
-        return taskRepository.findTasksWithin7DaysInprogress(resultDate);
+        return taskRepository.findTasksWithin7DaysInprogress(resultDate, user_id);
 
     }
 
-    public List<Task> getTaskLastWeekDone() {
+    public List<Task> getTaskLastWeekDone(Long user_id) {
         LocalDate today = LocalDate.now();
         LocalDate resultDate = today.minusDays(7);
-        return taskRepository.findTasksWithin7DaysDone(resultDate);
+        return taskRepository.findTasksWithin7DaysDone(resultDate , user_id);
     }
 
     public CommonResponse deleteTask( Long id){

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class TaskListController {
 
     private final TaskListService taskListService;
@@ -20,19 +20,19 @@ public class TaskListController {
         this.taskListService = taskListService;
     }
 
-    @GetMapping(value = "/tasktodo")
-    public List<Task> getTaskLastWeekTodo(){
-        return taskListService.getTaskLastWeekTodo();
+    @GetMapping(value = "/todo/{user_id}")
+    public List<Task> getTaskLastWeekTodo(@PathVariable Long user_id){
+        return taskListService.getTaskLastWeekTodo(user_id);
     }
 
-    @GetMapping(value = "/taskinprogress")
-    public List<Task> getTaskLastWeekInprogress(){
-        return taskListService.getTaskLastWeekInprogress();
+    @GetMapping(value = "/inprogress/{user_id}")
+    public List<Task> getTaskLastWeekInprogress(@PathVariable Long user_id){
+        return taskListService.getTaskLastWeekInprogress(user_id);
     }
 
-    @GetMapping(value = "/taskdone")
-    public List<Task> getTaskLastWeekDone(){
-        return taskListService.getTaskLastWeekDone();
+    @GetMapping(value = "/done/{user_id}")
+    public List<Task> getTaskLastWeekDone(@PathVariable Long user_id){
+        return taskListService.getTaskLastWeekDone(user_id);
     }
 
     @DeleteMapping
