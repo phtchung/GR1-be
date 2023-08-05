@@ -2,6 +2,8 @@ package com.example.gr.controller;
 
 
 import com.example.gr.request.CreateTaskRequest;
+import com.example.gr.request.CreateUpdateCheckListRequest;
+import com.example.gr.request.ShareTaskRequest;
 import com.example.gr.response.CommonResponse;
 import com.example.gr.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +28,12 @@ public class TaskController {
     public CommonResponse updateTaskById(@PathVariable Long taskID, @RequestBody CreateTaskRequest createTaskRequest){
         return taskService.updateTaskById(taskID,createTaskRequest);
     }
+
+    @PostMapping("/share/{taskId}")
+    public CommonResponse shareTaskByPhone(@PathVariable Long taskId, @RequestBody ShareTaskRequest shareTaskRequest){
+        return taskService.shareTaskByPhone(taskId,shareTaskRequest);
+    }
+
+
 
 }
