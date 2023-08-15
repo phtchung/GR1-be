@@ -40,7 +40,7 @@ public class OverviewService {
     }
 
 
-    public CommonResponse createTask(CreateTaskRequest createTaskRequest) {
+    public CommonResponse createTask( CreateTaskRequest createTaskRequest) {
 
         CommonResponse commonResponse = new CommonResponse<>();
         try{
@@ -56,11 +56,11 @@ public class OverviewService {
                     createTaskRequest.getControl()
             );
 
-            Task newTask = taskRepository.save(task);
-            if (newTask == null)
-                return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
 
-            return commonResponse.result("200","Thành công!",true);
+            if (task == null)
+                return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
+            taskRepository.save(task);
+            return commonResponse.data(task).result("200"," Thêm Thành công!",true);
         }catch (Exception e){
 
             return commonResponse.result("500","Có lỗi server!",false);
