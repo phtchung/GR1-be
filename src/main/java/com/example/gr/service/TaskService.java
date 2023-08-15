@@ -29,7 +29,7 @@ public class TaskService {
     public CommonResponse getTaskbyId(Long taskId){
             CommonResponse commonResponse = new CommonResponse<>();
             try{
-                List<Task> task = taskRepository.findTask(taskId);
+                Task task = taskRepository.findTaskById(taskId);
                 if (task == null) {
                     return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
                 }
