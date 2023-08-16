@@ -86,7 +86,7 @@ public class TaskService {
                     return commonResponse.result("400","Không thể chia sẻ task cho chính mình!",false);
 
                 }
-                if(shareTaskRequest.getPermission() != 0 || shareTaskRequest.getPermission() != 1){
+                if(shareTaskRequest.getPermission() != 0 && shareTaskRequest.getPermission() != 1){
                     return commonResponse.result("400","Sai quyền truy cập!",false);
 
                 }

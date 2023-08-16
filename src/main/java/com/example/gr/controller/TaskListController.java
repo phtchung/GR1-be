@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -35,9 +36,9 @@ public class TaskListController {
         return taskListService.getTaskLastWeekDone(user_id);
     }
 
-    @DeleteMapping
-    public CommonResponse deleteTask(@RequestParam("id") Long id){
-        return taskListService.deleteTask(id);
+    @DeleteMapping("/remove_task")
+    public CommonResponse deleteTask(@RequestBody Map<String,Long> body){
+        return taskListService.deleteTask(body.get("taskId"));
     }
 
 }
