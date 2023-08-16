@@ -61,6 +61,20 @@ public class CheckListService {
         }
     }
 
+    public CommonResponse deleteCheckList( Long id){
+        CommonResponse commonResponse = new CommonResponse<>();
+        try{
+            checkListRepository.deleteById(id);
+            return commonResponse.result("200","Thành công!",true);
+
+        }catch (Exception e){
+            return commonResponse.result("500","Có lỗi server!",false);
+
+        }
+
+    }
+
+
     public CommonResponse updateCheckListById(Long checkListId, CreateUpdateCheckListRequest createUpdateCheckListRequest){
         CommonResponse commonResponse = new CommonResponse<>();
         try{

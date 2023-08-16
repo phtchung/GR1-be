@@ -8,6 +8,8 @@ import com.example.gr.service.CheckListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/task")
 public class CheckListController {
@@ -31,5 +33,10 @@ public class CheckListController {
     @PutMapping("/update/{checkListId}")
     public CommonResponse updateCheckListById(@PathVariable Long checkListId, @RequestBody CreateUpdateCheckListRequest createUpdateCheckListRequest){
         return checkListService.updateCheckListById(checkListId,createUpdateCheckListRequest);
+    }
+
+    @DeleteMapping("/checklist")
+    public CommonResponse deleteCheckList(@RequestBody Map<String,Long> body){
+        return checkListService.deleteCheckList(body.get("checkListId"));
     }
 }
