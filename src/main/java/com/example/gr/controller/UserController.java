@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
@@ -18,13 +18,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping("/{userId}")
-    public CommonResponse  updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest updateUserRequest) {
-        return userService.updateUser(userId, updateUserRequest);
+    @PutMapping("/user")
+    public CommonResponse  updateUser( @RequestBody UpdateUserRequest updateUserRequest) {
+        return userService.updateUser( updateUserRequest);
 
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("users/{userId}")
     public CommonResponse getUser(@PathVariable Long userId){
         return userService.getUser(userId);
     }

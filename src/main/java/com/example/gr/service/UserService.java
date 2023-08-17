@@ -13,19 +13,27 @@ public class UserService {
     private UserRepository userRepository ;
 
 
-    public CommonResponse updateUser(Long userId , UpdateUserRequest updateUserRequest) {
+    public CommonResponse updateUser( UpdateUserRequest updateUserRequest) {
 
         CommonResponse commonResponse = new CommonResponse<>();
         try {
-            User user = userRepository.findUser(userId);
+            User user = userRepository.findUser(updateUserRequest.getUserId());
 
             if (user == null) {
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
             }
-            user.setGender(updateUserRequest.getGender());
-            user.setAbout(updateUserRequest.getAbout());
-            user.setPhoneNumber(updateUserRequest.getPhoneNumber());
-            user.setBirthday(updateUserRequest.getBirthday());
+            if (updateUserRequest.getGender() != null && !updateUserRequest.getGender().isEmpty()) {
+                user.setGender(updateUserRequest.getGender());
+            }
+            if (updateUserRequest.getAbout() != null && !updateUserRequest.getAbout().isEmpty()) {
+                user.setAbout(updateUserRequest.getAbout());
+            }
+            if (updateUserRequest.getBirthday() != null ) {
+                user.setBirthday(updateUserRequest.getBirthday());
+            }
+            if (updateUserRequest.getPhoneNumber() != null && !updateUserRequest.getPhoneNumber().isEmpty()) {
+                user.setPhoneNumber(updateUserRequest.getPhoneNumber());
+            }
 
             // Save the updated user object
             userRepository.save(user);

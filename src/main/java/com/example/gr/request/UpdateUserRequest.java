@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserRequest {
+    private Long userId;
     private String phoneNumber;
     private String about;
     private String gender;
