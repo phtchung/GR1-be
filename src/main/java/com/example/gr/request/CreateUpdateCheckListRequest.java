@@ -17,4 +17,5 @@ public class CreateUpdateCheckListRequest {
     private Long taskId;
     private Date dateEnd;
     private String note ;
+    private Long checkListId;
 }

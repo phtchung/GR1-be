@@ -75,10 +75,10 @@ public class CheckListService {
     }
 
 
-    public CommonResponse updateCheckListById(Long checkListId, CreateUpdateCheckListRequest createUpdateCheckListRequest){
+    public CommonResponse updateCheckListById( CreateUpdateCheckListRequest createUpdateCheckListRequest){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
-            CheckList checkList = checkListRepository.findById(checkListId).orElse(null);
+            CheckList checkList = checkListRepository.findById(createUpdateCheckListRequest.getCheckListId()).orElse(null);
 
             if (checkList == null) {
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
@@ -87,9 +87,12 @@ public class CheckListService {
             if(createUpdateCheckListRequest.getDateEnd() != null && createUpdateCheckListRequest.getDateEnd().compareTo(checkList.getDateEnd()) <= 0) {
                 checkList.setDateEnd(createUpdateCheckListRequest.getDateEnd());
             }
-            checkList.setNote(createUpdateCheckListRequest.getNote());
-            if(createUpdateCheckListRequest.getTitle() != null) {
+
+            if(createUpdateCheckListRequest.getTitle() != null && !createUpdateCheckListRequest.getTitle().isEmpty()) {
                 checkList.setTitle(createUpdateCheckListRequest.getTitle());
+            }
+            if(createUpdateCheckListRequest.getNote() != null && !createUpdateCheckListRequest.getNote().isEmpty()) {
+                checkList.setNote(createUpdateCheckListRequest.getNote());
             }
             if(createUpdateCheckListRequest.getProgress() != null) {
                 checkList.setProgress(createUpdateCheckListRequest.getProgress());

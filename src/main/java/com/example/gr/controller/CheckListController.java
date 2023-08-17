@@ -20,7 +20,7 @@ public class CheckListController {
         this.checkListService = checkListService;
     }
 
-    @PostMapping("/create_checklist")
+    @PostMapping("/checklist")
     public CommonResponse createCheckList(@RequestBody CreateUpdateCheckListRequest createUpdateCheckListRequest){
         return checkListService.createCheckList(createUpdateCheckListRequest);
     }
@@ -30,9 +30,9 @@ public class CheckListController {
         return checkListService.getCheckList(taskId);
     }
 
-    @PutMapping("/update/{checkListId}")
-    public CommonResponse updateCheckListById(@PathVariable Long checkListId, @RequestBody CreateUpdateCheckListRequest createUpdateCheckListRequest){
-        return checkListService.updateCheckListById(checkListId,createUpdateCheckListRequest);
+    @PutMapping("/checklist/update")
+    public CommonResponse updateCheckListById( @RequestBody CreateUpdateCheckListRequest createUpdateCheckListRequest){
+        return checkListService.updateCheckListById(createUpdateCheckListRequest);
     }
 
     @DeleteMapping("/checklist")
