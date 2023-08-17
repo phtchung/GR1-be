@@ -41,10 +41,10 @@ public class TaskService {
             }
     }
 
-    public CommonResponse updateTaskById(Long taskId, CreateTaskRequest createTaskRequest){
+    public CommonResponse updateTaskById(CreateTaskRequest createTaskRequest){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
-            Task task = taskRepository.findById(taskId).orElse(null);
+            Task task = taskRepository.findById(createTaskRequest.getTaskId()).orElse(null);
 
             if (task == null) {
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
@@ -52,13 +52,13 @@ public class TaskService {
             if(createTaskRequest.getDateEnd() != null) {
                 task.setDateEnd(createTaskRequest.getDateEnd());
             }
-            if(createTaskRequest.getDateStart() != null) {
+            if(createTaskRequest.getDateStart() != null ) {
                 task.setDateStart(createTaskRequest.getDateStart());
             }
-            if(createTaskRequest.getDescription() != null) {
+            if(createTaskRequest.getDescription() != null && !createTaskRequest.getDescription().isEmpty()) {
                 task.setDescription(createTaskRequest.getDescription());
             }
-            if(createTaskRequest.getState() != null) {
+            if(createTaskRequest.getState() != null && !createTaskRequest.getState().isEmpty()) {
                 task.setState(createTaskRequest.getState());
             }
 

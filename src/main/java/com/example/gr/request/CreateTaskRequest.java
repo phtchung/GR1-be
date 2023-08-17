@@ -22,5 +22,6 @@ public class CreateTaskRequest {
     private Boolean isImportant;
     private Integer control;
     private Long userId;
+    private Long taskId;
 
 }

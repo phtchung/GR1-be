@@ -24,9 +24,9 @@ public class TaskController {
         return taskService.getTaskbyId(taskID);
     }
 
-    @PutMapping("/{taskID}")
-    public CommonResponse updateTaskById(@PathVariable Long taskID, @RequestBody CreateTaskRequest createTaskRequest){
-        return taskService.updateTaskById(taskID,createTaskRequest);
+    @PutMapping("/update")
+    public CommonResponse updateTaskById( @RequestBody CreateTaskRequest createTaskRequest){
+        return taskService.updateTaskById(createTaskRequest);
     }
 
     @PostMapping("/share/{taskId}")
