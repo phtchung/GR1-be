@@ -27,7 +27,8 @@ public class OverviewService {
             List<Task> taskToday = taskRepository.findTaskwithEndDateAfterTodayAndNotDone(today , user_id);
             long totalTask = taskRepository.findAll().size();
             long totalTaskDone = taskRepository.findTaskwithStateDone().size();
-            OverviewResponse overviewResponse = new OverviewResponse(taskToday,totalTask,totalTaskDone);
+            long totalTaskImportant = taskRepository.findTaskwithStateImportant().size();
+            OverviewResponse overviewResponse = new OverviewResponse(taskToday,totalTask,totalTaskDone,totalTaskImportant);
 
             if (taskToday == null)
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
