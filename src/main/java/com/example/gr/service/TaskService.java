@@ -1,5 +1,6 @@
 package com.example.gr.service;
 
+import com.example.gr.entity.CheckList;
 import com.example.gr.entity.ShareTask;
 import com.example.gr.entity.Task;
 import com.example.gr.entity.User;
@@ -12,6 +13,7 @@ import com.example.gr.response.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,6 +24,7 @@ public class TaskService {
 
     @Autowired
     private UserRepository userRepository;
+
 
     @Autowired
     private ShareTaskRepository shareTaskRepository;
@@ -71,23 +74,23 @@ public class TaskService {
         }
     }
 
-    public CommonResponse shareTaskByPhone(Long taskId , ShareTaskRequest shareTaskRequest){
+    public CommonResponse shareTaskByPhone( ShareTaskRequest shareTaskRequest){
             CommonResponse commonResponse = new CommonResponse<>();
             try{
-                Task task = taskRepository.findById(taskId).orElse(null);
+                Task task = taskRepository.findTaskById(shareTaskRequest.getTaskId());
                 if (task == null) {
                     return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
                 }
                 User user = userRepository.findUserByPhone(shareTaskRequest.getPhoneNumber());
                 if (user == null){
-                    return commonResponse.result("400","Không tìm thấy người dùng hợp lệ!",false);
+                    return commonResponse.result("401","Không tìm thấy người dùng hợp lệ!",false);
                 }
                 if(task.getUser().getUserId() == user.getUserId()){
-                    return commonResponse.result("400","Không thể chia sẻ task cho chính mình!",false);
+                    return commonResponse.result("402","Không thể chia sẻ task cho chính mình!",false);
 
                 }
                 if(shareTaskRequest.getPermission() != 0 && shareTaskRequest.getPermission() != 1){
-                    return commonResponse.result("400","Sai quyền truy cập!",false);
+                    return commonResponse.result("403","Sai quyền truy cập!",false);
 
                 }
                 ShareTask shareTask = new ShareTask(
@@ -103,5 +106,37 @@ public class TaskService {
             }catch (Exception e){
                 return commonResponse.result("500", "Có lỗi server!", false);
             }
+    }
+
+    public CommonResponse getShareList(Long taskId){
+        CommonResponse commonResponse = new CommonResponse<>();
+        try{
+            if (taskId == null) {
+                return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
+            }
+            List<User> userSharedList = new ArrayList<>();
+            List<Long> shareUserIds = shareTaskRepository.getShareUserByTaskId(taskId);
+
+            for(Long userId : shareUserIds){
+                User user = userRepository.findUser(userId);
+                userSharedList.add(user);
+            }
+
+            return commonResponse.data(userSharedList).result("200","Lấy danh sách shareTask Thành công!",true);
+
+        }catch (Exception e){
+            return commonResponse.result("500", "Có lỗi server!", false);
+        }
+    }
+
+    public CommonResponse deleteSharedUser(Long userId){
+        CommonResponse commonResponse = new CommonResponse<>();
+        try{
+            shareTaskRepository.deleteById(userId);
+            return commonResponse.result("200","Xóa người dùng thành công!",true);
+
+        }catch (Exception e){
+            return commonResponse.result("500", "Có lỗi server!", false);
+        }
     }
 }

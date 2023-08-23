@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ShareTaskRequest {
     private String phoneNumber;
     private Integer permission;
+    private Long taskId;
 }

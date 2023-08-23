@@ -9,6 +9,8 @@ import com.example.gr.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/task")
 public class TaskController {
@@ -29,11 +31,19 @@ public class TaskController {
         return taskService.updateTaskById(createTaskRequest);
     }
 
-    @PostMapping("/share/{taskId}")
-    public CommonResponse shareTaskByPhone(@PathVariable Long taskId, @RequestBody ShareTaskRequest shareTaskRequest){
-        return taskService.shareTaskByPhone(taskId,shareTaskRequest);
+    @PostMapping("/share")
+    public CommonResponse shareTaskByPhone( @RequestBody ShareTaskRequest shareTaskRequest){
+        return taskService.shareTaskByPhone(shareTaskRequest);
     }
 
+    @GetMapping("/share-with-user/{taskId}")
+    public CommonResponse getShareList( @PathVariable Long taskId){
+        return taskService.getShareList(taskId);
+    }
 
+    @DeleteMapping("/share")
+    public CommonResponse deleteSharedUser(@RequestBody Map<String,Long> body){
+        return taskService.deleteSharedUser(body.get("userId"));
+    }
 
 }
