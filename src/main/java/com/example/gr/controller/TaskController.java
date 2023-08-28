@@ -43,7 +43,7 @@ public class TaskController {
 
     @DeleteMapping("/share")
     public CommonResponse deleteSharedUser(@RequestBody Map<String,Long> body){
-        return taskService.deleteSharedUser(body.get("userId"));
+        return taskService.deleteSharedUser(body.get("userId"), body.get("taskId"));
     }
 
 }

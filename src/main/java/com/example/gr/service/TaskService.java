@@ -1,6 +1,5 @@
 package com.example.gr.service;
 
-import com.example.gr.entity.CheckList;
 import com.example.gr.entity.ShareTask;
 import com.example.gr.entity.Task;
 import com.example.gr.entity.User;
@@ -129,10 +128,11 @@ public class TaskService {
         }
     }
 
-    public CommonResponse deleteSharedUser(Long userId){
+    public CommonResponse deleteSharedUser(Long userId , Long taskId){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
-            shareTaskRepository.deleteById(userId);
+
+            shareTaskRepository.deleteSharedUser(taskId , userId);
             return commonResponse.result("200","Xóa người dùng thành công!",true);
 
         }catch (Exception e){
