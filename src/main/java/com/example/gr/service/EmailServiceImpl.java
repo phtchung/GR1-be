@@ -1,7 +1,6 @@
 package com.example.gr.service;
 
 import com.example.gr.repository.TaskRepository;
-import com.example.gr.response.EmailDetails;
 import com.example.gr.response.SendEmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
