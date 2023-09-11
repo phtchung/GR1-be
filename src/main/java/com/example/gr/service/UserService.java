@@ -28,6 +28,11 @@ public class UserService {
             if (updateUserRequest.getAbout() != null && !updateUserRequest.getAbout().isEmpty()) {
                 user.setAbout(updateUserRequest.getAbout());
             }
+
+            if (updateUserRequest.getGender() != null && !updateUserRequest.getGender().isEmpty()) {
+                user.setAbout(updateUserRequest.getGender());
+            }
+
             if (updateUserRequest.getBirthday() != null ) {
                 user.setBirthday(updateUserRequest.getBirthday());
             }

@@ -13,11 +13,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("select s from Task s where s.user.userId = :user_id AND s.dateEnd >:today AND  s.state <> 'Done'")
     List<Task> findTaskwithEndDateAfterTodayAndNotDone(LocalDate today, Long user_id);
 
-    @Query("select s from Task s where   s.state = 'Done'")
-    List<Task> findTaskwithStateDone();
+    @Query("select s from Task s where s.user.userId =:user_id and s.state = 'Done'")
+    List<Task> findTaskwithStateDone(Long user_id);
 
-    @Query("select s from Task s where   s.isImportant = true")
-    List<Task> findTaskwithStateImportant();
+    @Query("select s from Task s where s.user.userId =:user_id and s.isImportant = true")
+    List<Task> findTaskwithStateImportant(Long user_id);
 
     @Query("SELECT t FROM Task t WHERE t.user.userId = :user_id AND t.dateStart >= :startDate AND t.state ='Todo'")
     List<Task> findTasksWithin7DaysTodo(LocalDate startDate, Long user_id);

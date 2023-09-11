@@ -1,6 +1,7 @@
 package com.example.gr.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonResponse<T> {

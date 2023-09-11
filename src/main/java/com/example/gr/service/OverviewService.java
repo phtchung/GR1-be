@@ -25,9 +25,9 @@ public class OverviewService {
         try{
             LocalDate today = LocalDate.now();
             List<Task> taskToday = taskRepository.findTaskwithEndDateAfterTodayAndNotDone(today , user_id);
-            long totalTask = taskRepository.findAll().size();
-            long totalTaskDone = taskRepository.findTaskwithStateDone().size();
-            long totalTaskImportant = taskRepository.findTaskwithStateImportant().size();
+            long totalTask = taskRepository.findTask(user_id).size();
+            long totalTaskDone = taskRepository.findTaskwithStateDone(user_id).size();
+            long totalTaskImportant = taskRepository.findTaskwithStateImportant(user_id).size();
             OverviewResponse overviewResponse = new OverviewResponse(taskToday,totalTask,totalTaskDone,totalTaskImportant);
 
             if (taskToday == null)
