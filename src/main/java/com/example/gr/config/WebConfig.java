@@ -26,13 +26,27 @@ public class WebConfig implements WebMvcConfigurer {
     private String myAllowedApi;
 
     private final UserRepository userRepository;
-    @Override
+
+
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**");
+//            }
+//        };
+//    }
+  @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins(myAllowedApi)
                 .allowedHeaders("*");
-//        registry.addMapping("/api/auth/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins(myAllowedApi);
-    }
+        registry.addMapping("/api/auth/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins(myAllowedApi);
+      registry.addMapping("/api/auth/logout").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins(myAllowedApi);
+
+  }
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)

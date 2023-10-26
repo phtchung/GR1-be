@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,22 +38,33 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
                 .csrf().disable()
-//                .cors(withDefaults())
                 .cors().and()
+//                .cors(withDefaults())
+
                 .authorizeHttpRequests((authorize) -> authorize
 
                     .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
-                    .anyRequest().authenticated())
+//                        .requestMatchers("/admin/**").hasAuthority("0")
+
+                        .anyRequest().authenticated())
 
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                .logout()
-                .logoutUrl("/api/auth/logout")
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
+                .logout(logout->
+                    logout.logoutUrl("/api/auth/logout")
+                            .addLogoutHandler(logoutHandler)
+                            .logoutSuccessHandler(((request, response, authentication) -> {
+                                SecurityContextHolder.clearContext();
+                            }))
+                )
+//                .logoutUrl("/api/auth/logout")
+//
+//                .addLogoutHandler(logoutHandler)
+//                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
         ;
 
 //                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint))
@@ -60,15 +72,8 @@ public class SecurityConfiguration {
 //                .csrf(AbstractHttpConfigurer::disable)
 //                .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        return http.build();
+        return http
+                .build();
     }
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("*"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+
 }

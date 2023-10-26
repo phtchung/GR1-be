@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -28,15 +29,32 @@ public class TaskService {
     @Autowired
     private ShareTaskRepository shareTaskRepository;
 
-    public CommonResponse getTaskbyId(Long taskId){
+    public CommonResponse getTaskbyId(Long taskId,String email){
             CommonResponse commonResponse = new CommonResponse<>();
             try{
                 Task task = taskRepository.findTaskById(taskId);
-                if (task == null) {
-                    return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
-                }
-
-                return commonResponse.data(task).result("200","Thành công!",true);
+                if(task != null) {
+                    if (task.getUser().getEmail().equals(email)) {
+                        return commonResponse.data(task).result("200", "Thành công!", true);
+                    }else{
+                        User user = userRepository.findUserByEmail(email);
+                        if(user != null){
+                            ShareTask taskShare = shareTaskRepository.getTaskbyTaskIdAndUserId(user.getUserId(),taskId);
+                            if(taskShare != null){
+                                if(taskShare.getControl() == 1){
+                                    task.setControl(2);
+                                }else {
+                                    task.setControl(0);
+                                }
+                                return commonResponse.data(task).result("200", "Thành công!", true);
+                            }else{
+                                return commonResponse.result("400","Yêu cầu không hợp lệ1!",false);
+                            }
+                        }else
+                            return commonResponse.result("400","Yêu cầu không hợp lệ2!",false);
+                    }
+                }else
+                    return commonResponse.result("400","Yêu cầu không hợp lệ3!",false);
 
             }catch (Exception e){
                 return commonResponse.result("500", "Có lỗi server!", false);
@@ -107,21 +125,28 @@ public class TaskService {
             }
     }
 
-    public CommonResponse getShareList(Long taskId){
+    public CommonResponse getShareList(Long userId,Long taskId){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
             if (taskId == null) {
                 return commonResponse.result("400","Yêu cầu không hợp lệ!",false);
             }
-            List<User> userSharedList = new ArrayList<>();
-            List<Long> shareUserIds = shareTaskRepository.getShareUserByTaskId(taskId);
+            Task task = taskRepository.findTaskById(taskId);
+            ShareTask shareTask = shareTaskRepository.getTaskbyTaskIdAndUserId(userId,taskId);
+            if(task.getUser().getUserId() == userId || shareTask.getControl() == 1){
+                List<User> userSharedList = new ArrayList<>();
+                List<Long> shareUserIds = shareTaskRepository.getShareUserByTaskId(taskId);
 
-            for(Long userId : shareUserIds){
-                User user = userRepository.findUser(userId);
-                userSharedList.add(user);
+                for(Long shareUserId : shareUserIds){
+                    User user = userRepository.findUser(shareUserId);
+                    userSharedList.add(user);
+                }
+                return commonResponse.data(userSharedList).result("200","Lấy danh sách shareTask Thành công!",true);
+            }else{
+                return commonResponse.result("400","Không có quyền truy cập danh sách!",false);
             }
 
-            return commonResponse.data(userSharedList).result("200","Lấy danh sách shareTask Thành công!",true);
+
 
         }catch (Exception e){
             return commonResponse.result("500", "Có lỗi server!", false);
@@ -131,7 +156,6 @@ public class TaskService {
     public CommonResponse deleteSharedUser(Long userId , Long taskId){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
-
             shareTaskRepository.deleteSharedUser(taskId , userId);
             return commonResponse.result("200","Xóa người dùng thành công!",true);
 
