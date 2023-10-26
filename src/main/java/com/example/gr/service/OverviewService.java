@@ -1,6 +1,7 @@
 package com.example.gr.service;
 
 import com.example.gr.entity.Task;
+import com.example.gr.repository.ShareTaskRepository;
 import com.example.gr.repository.TaskRepository;
 import com.example.gr.repository.UserRepository;
 import com.example.gr.request.CreateTaskRequest;
@@ -8,7 +9,10 @@ import com.example.gr.response.CommonResponse;
 import com.example.gr.response.OverviewResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +24,9 @@ public class OverviewService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ShareTaskRepository shareTaskRepository;
+
     public CommonResponse getOverview(Long user_id){
         CommonResponse commonResponse = new CommonResponse<>();
         try{
@@ -28,6 +35,17 @@ public class OverviewService {
             long totalTask = taskRepository.findTask(user_id).size();
             long totalTaskDone = taskRepository.findTaskwithStateDone(user_id).size();
             long totalTaskImportant = taskRepository.findTaskwithStateImportant(user_id).size();
+            List<Task> taskShared = getTaskShared(user_id);
+            for(Task task : taskShared){
+                if(task.getDateEnd().toLocalDate().isAfter(LocalDate.now()) && !task.getState().equals("Done")){
+                    taskToday.add(task);
+                    totalTask = totalTask + 1 ;
+                    if(task.getIsImportant()){
+                        totalTaskImportant = totalTaskImportant + 1;
+                    }
+                }
+            }
+
             OverviewResponse overviewResponse = new OverviewResponse(taskToday,totalTask,totalTaskDone,totalTaskImportant);
 
             if (taskToday == null)
@@ -40,6 +58,10 @@ public class OverviewService {
         }
     }
 
+    public List<Task> getTaskShared(Long userId){
+        List<Task> taskSharedList = shareTaskRepository.getTaskShared(userId);
+        return taskSharedList;
+    }
 
     public CommonResponse createTask( CreateTaskRequest createTaskRequest) {
 

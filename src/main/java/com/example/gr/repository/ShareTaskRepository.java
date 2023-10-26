@@ -1,6 +1,7 @@
 package com.example.gr.repository;
 
 import com.example.gr.entity.ShareTask;
+import com.example.gr.entity.Task;
 import com.example.gr.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,5 +18,16 @@ public interface ShareTaskRepository extends JpaRepository<ShareTask, Long> {
     @Transactional
     @Modifying
     void deleteSharedUser(Long taskId , Long userId);
+
+    @Query("SELECT s.task  FROM ShareTask s WHERE s.shareUserId = :userId ")
+    List<Task> getTaskShared(Long userId);
+
+    @Query("SELECT s  FROM ShareTask s WHERE s.task.id = :taskId ")
+    List<ShareTask> findByTaskId(Long taskId);
+
+
+    @Query("SELECT s  FROM ShareTask s WHERE s.task.id = :taskId and s.shareUserId = :userId")
+    ShareTask getTaskbyTaskIdAndUserId(Long userId , Long taskId);
+
 
 }
